@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "855934641492",
+    "firebase_url": "https://amiable-dynamo-271413.firebaseio.com",
+    "project_id": "amiable-dynamo-271413",
+    "storage_bucket": "amiable-dynamo-271413.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:855934641492:android:4d0d7945ccbdf9a40b14c1",
+        "android_client_info": {
+          "package_name": "com.application.rocknfunapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "855934641492-67kqceqvkf4uo7t2mpl393vg04kfbjj3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.application.rocknfunapp",
+            "certificate_hash": "07930c6587e3f4a127d9613bf0788ebda36bbfde"
+          }
+        },
+        {
+          "client_id": "855934641492-psq8ogngrvlocmo90k6bdnhff6v7rsja.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDECykqvA6-Y_wJZVSai1kzZMmXAWH0aoY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "855934641492-psq8ogngrvlocmo90k6bdnhff6v7rsja.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

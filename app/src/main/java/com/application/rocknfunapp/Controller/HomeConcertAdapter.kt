@@ -1,0 +1,53 @@
+package com.application.rocknfunapp.Controller
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.application.rocknfunapp.Models.Concert
+import com.application.rocknfunapp.R
+
+class HomeConcertAdapter(var concertList:List<Concert>): RecyclerView.Adapter<HomeConcertAdapter.ConcertViewHolder>()  {
+
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConcertViewHolder {
+        val inflater= LayoutInflater.from(parent.context)
+        val view=inflater.inflate(R.layout.home_concert_item,parent,false)
+        return ConcertViewHolder(view)
+        }
+
+    override fun getItemCount(): Int {
+        return concertList.size
+    }
+
+    override fun onBindViewHolder(holder: ConcertViewHolder, position: Int) {
+        if (concertList.isNotEmpty())
+        holder.updateUIwithInfos(concertList[position])
+    }
+
+
+    class ConcertViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        private val concertImage: ImageView
+        private val concertName: TextView
+        private val concertDate: TextView
+        private val concertPlace: TextView
+
+        init {
+            with(itemView){
+                concertImage=findViewById(R.id.concert_item_image)
+                concertName=findViewById(R.id.concert_item_name)
+                concertDate=findViewById(R.id.concert_item_date)
+                concertPlace=findViewById(R.id.concert_item_place)
+            }
+        }
+
+        fun updateUIwithInfos(concert:Concert){
+            concertName.text=concert.name
+            concertDate.text=concert.date.toString()
+            concertPlace.text=concert.location.name
+        }
+    }
+}
