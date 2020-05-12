@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.application.rocknfunapp.Controller.ComingConcertAdapter
+import com.application.rocknfunapp.MainActivity
 import com.application.rocknfunapp.Models.Concert
 import com.application.rocknfunapp.R
 
@@ -31,8 +32,8 @@ class EstablishmentFragment : Fragment() {
     }
 
     private fun configureRecyclerView(){
-        comingEvent= listOf()
-        recyclerView.adapter=ComingConcertAdapter(comingEvent)
+
+        recyclerView.adapter=ComingConcertAdapter(MainActivity.concertList)
         recyclerView.layoutManager=LinearLayoutManager(requireContext(),RecyclerView.HORIZONTAL,false)
     }
 }

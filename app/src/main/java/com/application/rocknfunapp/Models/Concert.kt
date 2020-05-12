@@ -1,5 +1,6 @@
 package com.application.rocknfunapp.Models
 
+import android.graphics.drawable.Drawable
 import java.util.*
 
 class Concert(
@@ -7,6 +8,6 @@ class Concert(
     var location: Establishment,
     var date:Date,
     var description:String,
-    var image:String
+    var image:Drawable
 ){
 }

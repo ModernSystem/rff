@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.application.rocknfunapp.Controller.HomeConcertAdapter
+import com.application.rocknfunapp.MainActivity
 import com.application.rocknfunapp.Models.Concert
 import com.application.rocknfunapp.R
 
@@ -28,8 +29,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun configureRecyclerView(){
-        concertList= listOf()
-        val adapter=HomeConcertAdapter(concertList)
+
+        val adapter=HomeConcertAdapter(MainActivity.concertList)
         concertRecyclerView.adapter=adapter
         concertRecyclerView.layoutManager=LinearLayoutManager(requireContext())
     }

@@ -6,10 +6,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.application.rocknfunapp.MainActivity.Companion.formatDate
 import com.application.rocknfunapp.Models.Concert
 import com.application.rocknfunapp.R
 
-class HomeConcertAdapter(var concertList:List<Concert>): RecyclerView.Adapter<HomeConcertAdapter.ConcertViewHolder>()  {
+class HomeConcertAdapter(private var concertList:List<Concert>): RecyclerView.Adapter<HomeConcertAdapter.ConcertViewHolder>()  {
 
 
 
@@ -25,7 +26,7 @@ class HomeConcertAdapter(var concertList:List<Concert>): RecyclerView.Adapter<Ho
 
     override fun onBindViewHolder(holder: ConcertViewHolder, position: Int) {
         if (concertList.isNotEmpty())
-        holder.updateUIwithInfos(concertList[position])
+        holder.updateUInitInfo(concertList[position])
     }
 
 
@@ -44,10 +45,11 @@ class HomeConcertAdapter(var concertList:List<Concert>): RecyclerView.Adapter<Ho
             }
         }
 
-        fun updateUIwithInfos(concert:Concert){
+        fun updateUInitInfo(concert:Concert){
             concertName.text=concert.name
-            concertDate.text=concert.date.toString()
+            concertDate.text=formatDate(concert.date)
             concertPlace.text=concert.location.name
+            concertImage.setImageDrawable(concert.image)
         }
     }
 }

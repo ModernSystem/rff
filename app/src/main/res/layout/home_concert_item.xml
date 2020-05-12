@@ -10,6 +10,7 @@
         android:id="@+id/concert_item_image"
         android:layout_width="match_parent"
         android:layout_height="@dimen/concert_item_image_height"
+        android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 

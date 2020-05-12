@@ -38,6 +38,6 @@
     <fragment
         android:id="@+id/nav_NewConcert"
         android:name="com.application.rocknfunapp.ui.newConcert.NewConcertFragment"
-        android:label="@string/menu_send"
+        android:label="@string/menu_create_concert"
         tools:layout="@layout/fragment_new_concert" />
 </navigation>

@@ -1,126 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="bottom">
 
-    <TextView
-        android:id="@+id/new_concert_title"
+    <ScrollView
+        android:id="@+id/scrollView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/new_concert_ok_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        android:text="@string/new_concert_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="0dp">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/new_concert_name_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_5dp"
-        app:layout_constraintTop_toTopOf="@id/new_concert_picture"
-        app:layout_constraintLeft_toRightOf="@id/new_concert_picture"
-        app:layout_constraintRight_toRightOf="@id/new_concert_description_layout">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/new_concert_name"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/title"
-            android:inputType="text" />
+            android:layout_height="wrap_content">
 
-    </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/new_concert_date_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_5dp"
-        app:layout_constraintTop_toBottomOf="@id/new_concert_name_layout"
-        app:layout_constraintLeft_toRightOf="@id/new_concert_picture"
-        app:layout_constraintRight_toRightOf="@id/new_concert_description_layout">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/add_image_button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/insert_new_image"
+                android:textSize="15sp"
+                app:backgroundTint="@android:color/transparent"
+                app:cornerRadius="8dp"
+                app:rippleColor="#33AAAAAA"
+                app:strokeWidth="2dp"
+                app:strokeColor="@android:color/white"
+                android:elevation="5dp"
+                android:textColor="@android:color/white"
+                app:icon="@drawable/ic_add_photo_alternate_24px"
+                app:layout_constraintTop_toTopOf="@id/new_concert_picture"
+                app:layout_constraintBottom_toBottomOf="@id/new_concert_picture"
+                app:layout_constraintRight_toRightOf="@id/new_concert_picture"
+                app:layout_constraintLeft_toLeftOf="@id/new_concert_picture"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/new_concert_date"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/date"
-            android:inputType="date"/>
 
-    </com.google.android.material.textfield.TextInputLayout>
 
-    <ImageView
-        android:id="@+id/new_concert_picture"
-        android:layout_width="@dimen/concert_to_come_item_picture_size"
-        android:layout_height="@dimen/concert_to_come_item_picture_size"
-        app:layout_constraintTop_toBottomOf="@id/new_concert_title"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="@dimen/margin_20dp"
-        android:layout_marginTop="40dp"
-        android:contentDescription="@string/new_concert_picture"
-        android:src="@drawable/default_1"
-        android:elevation="@dimen/margin_5dp"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/new_concert_name_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:layout_constraintTop_toBottomOf="@id/new_concert_picture">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/new_concert_artist_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_20dp"
-        app:layout_constraintTop_toBottomOf="@id/new_concert_picture"
-        app:layout_constraintRight_toRightOf="@id/new_concert_description_layout">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/new_concert_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/title"
+                    android:inputType="text"
+                    android:singleLine="false" />
 
-        <AutoCompleteTextView
-            android:id="@+id/new_concert_artist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/artist"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/new_concert_date_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/margin_20dp"
+                app:layout_constraintTop_toBottomOf="@id/new_concert_name_layout"
+                app:layout_constraintLeft_toLeftOf="@id/new_concert_description_layout"
+                app:layout_constraintRight_toRightOf="@id/new_concert_description_layout">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/new_concert_description_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_20dp"
-        app:layout_constraintTop_toBottomOf="@id/new_concert_artist_layout">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/new_concert_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:hint="@string/date"
+                    android:drawableStart="@drawable/ic_calendar_today_24px"
+                    android:drawablePadding="@dimen/margin_5dp"
+                    android:inputType="text"
+                    />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/new_concert_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/description"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <ImageView
+                android:id="@+id/new_concert_picture"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/concert_to_come_item_picture_size"
+                android:src="@drawable/defaut_1"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/new_concert_picture"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/new_concert_artist_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_20dp"
+                app:layout_constraintRight_toRightOf="@id/new_concert_description_layout"
+                app:layout_constraintTop_toBottomOf="@id/new_concert_date_layout">
+
+                <AutoCompleteTextView
+                    android:id="@+id/new_concert_artist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/artist"
+                    android:drawableStart="@drawable/ic_album_24px"
+                    android:drawablePadding="@dimen/margin_5dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/new_concert_description_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_20dp"
+                app:layout_constraintTop_toBottomOf="@id/new_concert_artist_layout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/new_concert_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/description"
+                    android:drawableStart="@drawable/ic_mode_comment_24px"
+                    android:drawablePadding="@dimen/margin_5dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
     <Button
+        app:layout_constraintTop_toBottomOf="@id/scrollView"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/new_concert_ok_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ok"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:text="@string/create"
+        android:textAllCaps="false"
         android:layout_margin="@dimen/margin_20dp"
-        android:background="@color/colorAccent"/>
-
-    <Button
-        android:id="@+id/new_concert_cancel_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/cancel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/new_concert_ok_button"
-        android:layout_margin="@dimen/margin_20dp"
-        android:background="@color/colorAccent"/>
-
-
-
-
-
+        android:backgroundTint="@color/colorAccent"
+        android:background="@drawable/rounded_button"
+        android:layout_gravity="bottom"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

@@ -11,7 +11,8 @@
     <dimen name="profile_picture_size">100dp</dimen>
     <dimen name="profile_picture_margin">25dp</dimen>
     <dimen name="concert_to_come_item_size">150dp</dimen>
-    <dimen name="concert_to_come_item_picture_size">120dp</dimen>
+    <dimen name="concert_to_come_item_picture_size">180dp</dimen>
+    <dimen name="concert_to_come_item_button_size">120dp</dimen>
     <dimen name="margin_5dp">5dp</dimen>
     <dimen name="margin_20dp">20dp</dimen>
 

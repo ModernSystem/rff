@@ -6,10 +6,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.application.rocknfunapp.MainActivity.Companion.formatDate
 import com.application.rocknfunapp.Models.Concert
 import com.application.rocknfunapp.R
 
-class ComingConcertAdapter(var concertToCome:List<Concert>):RecyclerView.Adapter<ComingConcertAdapter.ConcertToComeViewHolder>() {
+class ComingConcertAdapter(var concertToCome:MutableList<Concert>):RecyclerView.Adapter<ComingConcertAdapter.ConcertToComeViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConcertToComeViewHolder {
@@ -23,13 +24,13 @@ class ComingConcertAdapter(var concertToCome:List<Concert>):RecyclerView.Adapter
     }
 
     override fun onBindViewHolder(holder: ConcertToComeViewHolder, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        holder.updateUIwithInfos(concertToCome[position])
     }
 
 
     class ConcertToComeViewHolder(itemView:View):RecyclerView.ViewHolder(itemView){
-        private lateinit var concertToComePicture:ImageView
-        private lateinit var concertToComeInformation:TextView
+        private  var concertToComePicture:ImageView
+        private  var concertToComeInformation:TextView
 
         init{
             with(itemView){
@@ -39,7 +40,8 @@ class ComingConcertAdapter(var concertToCome:List<Concert>):RecyclerView.Adapter
         }
 
         fun updateUIwithInfos( concert:Concert){
-            concertToComeInformation.text="${concert.name} @ ${concert.date}"
+            concertToComeInformation.text="${concert.name} @ ${formatDate( concert.date)}"
+            concertToComePicture.setImageDrawable(concert.image)
         }
     }
 }
