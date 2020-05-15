@@ -24,4 +24,10 @@
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
     <string name="insert_new_image">Insert image</string>
+    <string name="title_short">Title is too short</string>
+    <string name="title_missing">You must choose a title</string>
+    <string name="artist_name_short">Artist name is too short</string>
+    <string name="artist_name_missing">You must choose an artist name</string>
+    <string name="date_missing">You must select a date</string>
+    <string name="search_title">Search</string>
 </resources>

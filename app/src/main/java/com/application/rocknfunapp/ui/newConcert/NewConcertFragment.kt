@@ -8,17 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.application.rocknfunapp.MainActivity
 import com.application.rocknfunapp.MainActivity.Companion.formatDate
-import com.application.rocknfunapp.Models.Concert
-import com.application.rocknfunapp.Models.Establishment
+import com.application.rocknfunapp.models.Artist
+import com.application.rocknfunapp.models.Concert
+import com.application.rocknfunapp.models.Establishment
 import com.application.rocknfunapp.R
 import com.google.android.material.button.MaterialButton
-import java.text.SimpleDateFormat
 import java.util.*
 
 class NewConcertFragment : Fragment() {
@@ -32,6 +30,7 @@ class NewConcertFragment : Fragment() {
     private lateinit var okButton:Button
     private lateinit var addImageButton:MaterialButton
     private var calendar=Calendar.getInstance()
+    private var calendarVerification=calendar.timeInMillis
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -131,16 +130,52 @@ class NewConcertFragment : Fragment() {
 
     private fun configureAndAddConcert(){
         okButton.setOnClickListener {
-            val establishment=Establishment("bleu","Brest","Description")
-            val concert= Concert(
-                newConcertName.text.toString(),
-                establishment,
-                calendar.time,
-                newConcertDescription.text.toString(),
-                newConcertPicture.drawable
-            )
-            MainActivity.concertList.add(concert)
-            findNavController().navigateUp()
+            if (checkInformation()) {
+                val establishment = MainActivity.establishment
+                val concert = Concert(
+                    newConcertName.text.toString(),
+                    establishment,
+                    calendar.time,
+                    newConcertDescription.text.toString(),
+                    newConcertPicture.drawable,
+                    Artist(newConcertArtist.text.toString())
+                )
+                /**
+                 * TODO add concert
+                 */
+                view?.clearFocus()
+                findNavController().navigateUp()
+            }
         }
     }
+
+    private fun checkInformation():Boolean{
+
+        return when {
+            (newConcertName.text.toString().length<3 && newConcertName.text.isNotEmpty()) -> {
+                Toast.makeText(context, getText(R.string.title_short),Toast.LENGTH_SHORT).show()
+                false
+            }
+            (newConcertName.text.isEmpty()) -> {
+                Toast.makeText(context, getText(R.string.title_missing),Toast.LENGTH_SHORT).show()
+                false
+            }
+
+            (calendar.timeInMillis== calendarVerification)-> {
+                Toast.makeText(context, getText(R.string.date_missing), Toast.LENGTH_SHORT).show()
+                false
+            }
+            (newConcertArtist.text.toString().length<3&& newConcertArtist.text.isNotEmpty())->{
+                Toast.makeText(context, getText(R.string.artist_name_short),Toast.LENGTH_SHORT).show()
+                false
+            }
+            (newConcertArtist.text.toString().isEmpty())->{
+                Toast.makeText(context, getText(R.string.artist_name_missing),Toast.LENGTH_SHORT).show()
+                false
+            }
+            else -> true
+        }
+    }
+
+
 }

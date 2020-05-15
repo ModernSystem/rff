@@ -1,4 +1,4 @@
-package com.application.rocknfunapp.Controller
+package com.application.rocknfunapp.controller
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,10 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.application.rocknfunapp.MainActivity.Companion.formatDate
-import com.application.rocknfunapp.Models.Concert
+import com.application.rocknfunapp.models.Concert
 import com.application.rocknfunapp.R
 
-class ComingConcertAdapter(var concertToCome:MutableList<Concert>):RecyclerView.Adapter<ComingConcertAdapter.ConcertToComeViewHolder>() {
+class ComingConcertAdapter(private var concertToCome:MutableList<Concert>):RecyclerView.Adapter<ComingConcertAdapter.ConcertToComeViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConcertToComeViewHolder {
@@ -24,7 +24,7 @@ class ComingConcertAdapter(var concertToCome:MutableList<Concert>):RecyclerView.
     }
 
     override fun onBindViewHolder(holder: ConcertToComeViewHolder, position: Int) {
-        holder.updateUIwithInfos(concertToCome[position])
+        holder.updateUIInitInfo(concertToCome[position])
     }
 
 
@@ -39,7 +39,8 @@ class ComingConcertAdapter(var concertToCome:MutableList<Concert>):RecyclerView.
             }
         }
 
-        fun updateUIwithInfos( concert:Concert){
+
+        fun updateUIInitInfo( concert:Concert){
             concertToComeInformation.text="${concert.name} @ ${formatDate( concert.date)}"
             concertToComePicture.setImageDrawable(concert.image)
         }

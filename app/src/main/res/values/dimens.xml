@@ -8,7 +8,7 @@
     <dimen name="recycler_view_item_margin">10dp</dimen>
     <dimen name="concert_item_image_height">200dp</dimen>
     <dimen name="concert_text_margin">5dp</dimen>
-    <dimen name="profile_picture_size">100dp</dimen>
+    <dimen name="profile_picture_size">200dp</dimen>
     <dimen name="profile_picture_margin">25dp</dimen>
     <dimen name="concert_to_come_item_size">150dp</dimen>
     <dimen name="concert_to_come_item_picture_size">180dp</dimen>
