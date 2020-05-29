@@ -30,4 +30,9 @@
     <string name="artist_name_missing">You must choose an artist name</string>
     <string name="date_missing">You must select a date</string>
     <string name="search_title">Search</string>
+    <string name="be_there_question">Will you be there ?</string>
+    <string name="be_there">I\'ll be there</string>
+    <string name="number_of_people"> %1$d will be there</string>
+    <string name="app_label">rffApp</string>
+    <string name="search_hint">City, Bar, Artist ?</string>
 </resources>

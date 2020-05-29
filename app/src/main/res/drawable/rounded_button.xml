@@ -6,11 +6,11 @@
         android:insetBottom="6dp">
         <ripple android:color="?attr/colorControlHighlight">
             <item>
-                <shape android:shape="rectangle"
-                    android:tint="@android:color/transparent">
+                <shape android:shape="rectangle">
                     <corners android:radius="10dp" />
-                    <solid android:color="#1a237e" />
+                    <solid android:color="@android:color/transparent" />
                     <padding android:bottom="0dp" />
+                    <stroke android:width="5px" android:color="#000000" />
                 </shape>
             </item>
         </ripple>

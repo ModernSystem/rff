@@ -1,12 +1,10 @@
 package com.application.rocknfunapp.ui.establishment
 
-import android.content.Context
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.application.rocknfunapp.MainActivity
-import com.application.rocknfunapp.models.Establishment
 
 class EstablishmentViewModel : ViewModel() {
 
@@ -30,9 +28,9 @@ class EstablishmentViewModel : ViewModel() {
     }
     val description: LiveData<String> = _description
 
-    private val _profilPicture = MutableLiveData<Drawable>().apply {
-        value = MainActivity.establishment.profilPicture
+    private val _profilPicture = MutableLiveData<String>().apply {
+        value = MainActivity.establishment.profilePicture
     }
-    val picture: LiveData<Drawable> = _profilPicture
+    val picture: LiveData<String> = _profilPicture
 
 }

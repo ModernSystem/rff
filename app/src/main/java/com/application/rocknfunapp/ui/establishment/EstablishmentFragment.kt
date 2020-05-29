@@ -1,6 +1,7 @@
 package com.application.rocknfunapp.ui.establishment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +17,10 @@ import com.application.rocknfunapp.controller.ComingConcertAdapter
 import com.application.rocknfunapp.MainActivity
 import com.application.rocknfunapp.models.Concert
 import com.application.rocknfunapp.R
+import com.application.rocknfunapp.ui.home.CreateConcertList
+import com.google.firebase.firestore.ktx.toObject
 
-class EstablishmentFragment : Fragment() {
+class EstablishmentFragment : Fragment(),CreateConcertList {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var profilPicture:ImageView
@@ -26,6 +29,7 @@ class EstablishmentFragment : Fragment() {
     private lateinit var contact:TextView
     private lateinit var description:TextView
     private lateinit var comingEvent:MutableList<Concert>
+    private var concertList= mutableListOf<Concert>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +48,8 @@ class EstablishmentFragment : Fragment() {
             recyclerView=findViewById(R.id.establishment_layout_comingEventRecyclerView)
 
         }
-
+        comingEvent= mutableListOf()
+        getConcertList(this)
         configureRecyclerView()
         configureUi()
 
@@ -53,22 +58,42 @@ class EstablishmentFragment : Fragment() {
 
     private fun configureRecyclerView(){
 
-        recyclerView.adapter=ComingConcertAdapter(comingEvent)
+        recyclerView.adapter=ComingConcertAdapter(concertList,requireContext())
         recyclerView.layoutManager=LinearLayoutManager(requireContext(),RecyclerView.HORIZONTAL,false)
+    }
+
+    private fun getConcertList(listener: CreateConcertList){
+        concertList= mutableListOf()
+        MainActivity.dataBase.collection("Concert")
+            .get()
+            .addOnSuccessListener {result->
+                for (document in result){
+                    val concert =document.toObject<Concert>()
+                    listener.onConcertConstruct(concert,document.id)
+
+                }
+            }
+    }
+
+    override fun onConcertConstruct(concert: Concert, id: String) {
+        concertList.add(concert)
+        recyclerView.adapter!!.notifyDataSetChanged()
+        Log.d("TAAAAAAAAAAAAAAAAAAAAAAAAAAAG", concertList.toString())
+
     }
 
     private fun configureUi() {
         val viewModel = ViewModelProviders.of(this).get(EstablishmentViewModel::class.java)
-        viewModel.name.observe(this, Observer {
+        viewModel.name.observe(viewLifecycleOwner, Observer {
             name.text = it
         })
-        viewModel.address.observe(this, Observer {
+        viewModel.address.observe(viewLifecycleOwner, Observer {
             address.text = it
         })
-        viewModel.contact.observe(this, Observer {
+        viewModel.contact.observe(viewLifecycleOwner, Observer {
             contact.text = it
         })
-        viewModel.description.observe(this, Observer {
+        viewModel.description.observe(viewLifecycleOwner, Observer {
             description.text=it
         })
         profilPicture.setImageResource(R.drawable.defaut_2)

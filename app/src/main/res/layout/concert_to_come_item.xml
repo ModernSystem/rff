@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/concert_to_come_item_size"
-    android:layout_height="@dimen/concert_to_come_item_size"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:padding="@dimen/margin_5dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -12,16 +12,22 @@
         android:layout_margin="5dp"
         android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
-        android:id="@+id/concert_to_come_item_information"
+        android:id="@+id/concert_to_come_item_artist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hello_world"
-        android:layout_marginTop="5dp"
         app:layout_constraintTop_toBottomOf="@id/concert_to_come_item_picture"
         app:layout_constraintLeft_toLeftOf="@id/concert_to_come_item_picture"/>
+
+    <TextView
+        android:id="@+id/concert_to_come_item_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hello_world"
+        app:layout_constraintTop_toBottomOf="@id/concert_to_come_item_picture"
+        app:layout_constraintRight_toRightOf="@id/concert_to_come_item_picture"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

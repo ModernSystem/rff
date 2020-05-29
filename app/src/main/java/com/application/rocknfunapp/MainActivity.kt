@@ -17,11 +17,17 @@ import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
+import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.appcompat.widget.SearchView
 import com.application.rocknfunapp.models.Concert
 import com.application.rocknfunapp.models.Establishment
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.app_bar_main.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     companion object{
         val establishment= Establishment("Le Nom","7 rue de la place, Brest","06.62.84.12.56","Le bar le nom vous acceuille tout les jours de 18h à " +
-                "1h30 avec grand plaisir. \nA très vite !",null)
+                "1h30 avec grand plaisir. \nA très vite !",null,12)
 
         fun formatDate( date: Date):String{
             val formatDate="dd/MM/YYYY"
@@ -41,17 +47,34 @@ class MainActivity : AppCompatActivity() {
             return  "${dateFormat.format(date)} at ${timeFormat.format(date)}"
         }
 
+        fun formatdate2(date: Date):String{
+            val formatDate="dd/MM"
+            val formatTime="HH:mm"
+            val dateFormat= SimpleDateFormat(formatDate, Locale.FRANCE)
+            val timeFormat= SimpleDateFormat(formatTime, Locale.FRANCE)
+            return  "${dateFormat.format(date)}|${timeFormat.format(date)}"
+        }
+
+        var goingToConcert= mutableListOf<Concert>()
+        val storage=Firebase.storage
+        val dataBase=Firebase.firestore
+
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
+        val appBarLayout:AppBarLayout=findViewById(R.id.appbar_layout)
+
+
 
         setSupportActionBar(toolbar)
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
+
         fab.setOnClickListener { _ ->
             findNavController(R.id.nav_host_fragment).navigate(R.id.nav_NewConcert)
         }
@@ -62,24 +85,30 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
 
         appBarConfiguration = AppBarConfiguration(
-            setOf(
+            topLevelDestinationIds = setOf(
                 R.id.nav_home, R.id.nav_establishment, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_share, R.id.nav_send
-            ), drawerLayout
-
+                R.id.nav_tools, R.id.nav_share
+            ), drawerLayout = drawerLayout
         )
 
         navView.setupWithNavController(navController)
 
-
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.label==getString(R.string.menu_home)){
-                fab.show()
-                toolbar.navigationIcon=scaledDrawable(R.drawable.logo,144,144)
-            }
-            else {
-                fab.hide()
-                toolbar.navigationIcon=getDrawable(R.drawable.ic_arrow_back_black_24dp)
+            when (destination.label) {
+                getString(R.string.menu_home) -> {
+                        fab.show()
+                        toolbar.navigationIcon = scaledDrawable(R.drawable.logo, 96, 96)
+                }
+
+                getString(R.string.menu_create_concert)->{
+                        fab.hide()
+                        toolbar.navigationIcon = getDrawable(R.drawable.ic_arrow_back_black_24dp)
+                }
+
+                else ->{
+                        fab.hide()
+                        toolbar.navigationIcon = scaledDrawable(R.drawable.logo, 96, 96)
+                }
             }
 
         }

@@ -2,7 +2,9 @@ package com.application.rocknfunapp.ui.newConcert
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,12 +13,24 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.application.rocknfunapp.MainActivity
+import com.application.rocknfunapp.MainActivity.Companion.dataBase
 import com.application.rocknfunapp.MainActivity.Companion.formatDate
+import com.application.rocknfunapp.MainActivity.Companion.storage
 import com.application.rocknfunapp.models.Artist
 import com.application.rocknfunapp.models.Concert
 import com.application.rocknfunapp.models.Establishment
 import com.application.rocknfunapp.R
+import com.application.rocknfunapp.models.GlideApp
+import com.application.rocknfunapp.ui.home.BeThereButton
+import com.bumptech.glide.Glide
+import com.bumptech.glide.Registry
+import com.bumptech.glide.annotation.GlideModule
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import java.io.File
 import java.util.*
 
 class NewConcertFragment : Fragment() {
@@ -28,9 +42,11 @@ class NewConcertFragment : Fragment() {
     private lateinit var newConcertArtist:AutoCompleteTextView
     private lateinit var newConcertDescription:EditText
     private lateinit var okButton:Button
-    private lateinit var addImageButton:MaterialButton
+    private lateinit var addImageButton:Button
+    private lateinit var gsReference: StorageReference
     private var calendar=Calendar.getInstance()
     private var calendarVerification=calendar.timeInMillis
+    private var uri:Uri?=null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,13 +67,36 @@ class NewConcertFragment : Fragment() {
             okButton=findViewById(R.id.new_concert_ok_button)
             addImageButton=findViewById(R.id.add_image_button)
 
+            val storage=FirebaseStorage.getInstance()
+            gsReference = storage.getReferenceFromUrl(getRandomImage())
+            GlideApp.with(this)
+                .load(gsReference)
+                .into(newConcertPicture)
+
         }
         configureDatePicker()
         configureAddImage()
         configureAndAddConcert()
         newConcertPicture.isClickable=false
 
+
         return view
+    }
+
+    override fun onStop() {
+        super.onStop()
+        view?.clearFocus()
+    }
+
+    private fun getRandomImage():String{
+        val list= mutableListOf<String>(
+            "https://firebasestorage.googleapis.com/v0/b/amiable-dynamo-271413.appspot.com/o/Default%20concert%20images%2Fdefault_1.jpg?alt=media&token=9238c6b3-d230-412d-ad4e-d9a640378b02",
+            "https://firebasestorage.googleapis.com/v0/b/amiable-dynamo-271413.appspot.com/o/Default%20concert%20images%2Fdefault_2.jpg?alt=media&token=952c7c33-6429-4152-a64e-fb6d1095206f",
+            "https://firebasestorage.googleapis.com/v0/b/amiable-dynamo-271413.appspot.com/o/Default%20concert%20images%2Fdefault_3.jpg?alt=media&token=60a872b7-0e46-4d8c-86fc-178823787ee0",
+            "https://firebasestorage.googleapis.com/v0/b/amiable-dynamo-271413.appspot.com/o/Default%20concert%20images%2Fdefault_4.jpg?alt=media&token=77ffd66d-922c-4f63-8886-a498a15f5bf0"
+        )
+        list.shuffle()
+        return list[0]
     }
 
    private fun configureDatePicker(){
@@ -68,7 +107,7 @@ class NewConcertFragment : Fragment() {
        }
 
        newConcertDate.setOnClickListener {
-            val datePickerDialog=DatePickerDialog(context!!,
+            val datePickerDialog=DatePickerDialog(requireContext(),
                 date,
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
@@ -116,7 +155,7 @@ class NewConcertFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode==PICK_REQUEST_CODE){
-            val uri=data?.data
+            uri=data?.data
             newConcertPicture.setImageURI(uri)
             addImageButton.visibility=View.GONE
             newConcertPicture.isClickable=true
@@ -134,20 +173,36 @@ class NewConcertFragment : Fragment() {
                 val establishment = MainActivity.establishment
                 val concert = Concert(
                     newConcertName.text.toString(),
-                    establishment,
+                    "Le Nom",
                     calendar.time,
                     newConcertDescription.text.toString(),
-                    newConcertPicture.drawable,
-                    Artist(newConcertArtist.text.toString())
-                )
-                /**
-                 * TODO add concert
-                 */
-                view?.clearFocus()
+                    null,
+                    newConcertArtist.text.toString(),
+                    0)
+
+
+                concert.image= addConcertToFirebase(concert)
+                dataBase.collection("Concert").add(concert)
+                MainActivity.goingToConcert.add(concert)
                 findNavController().navigateUp()
+
             }
         }
     }
+
+    private fun addConcertToFirebase(concert: Concert):String?{
+        if (uri!=null) {
+            val file = File(uri.toString())
+            val variable = System.currentTimeMillis()
+            val storageRef = MainActivity.storage.reference
+            val imageRef = storageRef.child("image/${file.name}(${variable})")
+            var uploadTask = imageRef.putFile(uri!!)
+            return imageRef.path
+        }
+        else return gsReference.path
+
+    }
+
 
     private fun checkInformation():Boolean{
 
@@ -165,7 +220,7 @@ class NewConcertFragment : Fragment() {
                 Toast.makeText(context, getText(R.string.date_missing), Toast.LENGTH_SHORT).show()
                 false
             }
-            (newConcertArtist.text.toString().length<3&& newConcertArtist.text.isNotEmpty())->{
+            (newConcertArtist.text.toString().length<2&& newConcertArtist.text.isNotEmpty())->{
                 Toast.makeText(context, getText(R.string.artist_name_short),Toast.LENGTH_SHORT).show()
                 false
             }
@@ -178,4 +233,6 @@ class NewConcertFragment : Fragment() {
     }
 
 
+
 }
+

@@ -1,22 +1,33 @@
 package com.application.rocknfunapp.ui.home
 
+import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.application.rocknfunapp.controller.HomeConcertAdapter
 import com.application.rocknfunapp.MainActivity
 import com.application.rocknfunapp.models.Concert
 import com.application.rocknfunapp.R
-import java.util.*
+import com.application.rocknfunapp.ui.establishment.EstablishmentViewModel
+import com.google.firebase.firestore.ktx.toObject
+import kotlinx.android.synthetic.main.nav_header_main.*
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(),BeThereButton,CreateConcertList {
 
     private lateinit var concertRecyclerView: RecyclerView
-    private lateinit var concertList: MutableList<Concert>
+    private lateinit var waitingImage:ImageView
+    private var waitingSize=0
+    private var hashSet= hashSetOf<String>()
+    private var concertList= mutableListOf<Concert>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,34 +35,88 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
-        concertRecyclerView=view.findViewById(R.id.home_recyclerview)
-
-
-
-        concertList= mutableListOf<Concert>(Concert("Concert 1",
-            MainActivity.establishment,
-            Calendar.getInstance().time,null,context?.getDrawable(R.drawable.defaut_1)!!,null),
-            Concert("Concert 1",
-                MainActivity.establishment,
-                Calendar.getInstance().time,null,context?.getDrawable(R.drawable.defaut_2)!!,null),
-            Concert("Concert 1",
-                MainActivity.establishment,
-                Calendar.getInstance().time,null,context?.getDrawable(R.drawable.defaut_3)!!,null),
-            Concert("Concert 1",
-                MainActivity.establishment,
-                Calendar.getInstance().time,null,context?.getDrawable(R.drawable.defaut_1)!!,null),
-            Concert("Concert 1",
-                MainActivity.establishment,
-                Calendar.getInstance().time,null,context?.getDrawable(R.drawable.defaut_4)!!,null))
-
+        with (view){
+            waitingImage=findViewById(R.id.waiting_icon)
+            concertRecyclerView=findViewById(R.id.home_recyclerview)
+        }
+        getConcertList(this)
+        configureWaitingImage()
         configureRecyclerView()
+
+
+
+
         return view
     }
 
+
+    /**
+     * Configure UI
+     */
+
     private fun configureRecyclerView(){
 
-        val adapter=HomeConcertAdapter(concertList)
+        val adapter=HomeConcertAdapter(concertList,requireContext(),this)
         concertRecyclerView.adapter=adapter
         concertRecyclerView.layoutManager=LinearLayoutManager(requireContext())
     }
+
+    private fun configureWaitingImage(){
+        if (concertList.size>0){
+            waitingImage.visibility=View.GONE
+        }
+    }
+
+
+
+    /**
+     * Get data from database and fetch inside a list using callback
+     */
+    private fun getConcertList(listener:CreateConcertList){
+            MainActivity.dataBase.collection("Concert")
+                .get()
+                .addOnSuccessListener { result ->
+                    waitingSize= result.size()
+                    for (document in result) {
+                        val concert = document.toObject<Concert>()
+                        concert.id=document.reference.id
+                        listener.onConcertConstruct(concert, document.id)
+                    }
+                }
+    }
+
+    override fun onConcertConstruct(concert: Concert, id: String) {
+        if (!hashSet.contains(concert.id)) {
+            concertList.add(concert)
+            hashSet.add(concert.id!!)
+            Log.d("concert",concert.id!!)
+        }
+
+        concertRecyclerView.adapter!!.notifyDataSetChanged()
+        if (concertList.size==waitingSize) {
+            waitingImage.visibility = View.GONE
+            concertRecyclerView.visibility=View.VISIBLE
+        }
+    }
+
+
+    /**
+     * Configure the "I'll be there Button"
+     */
+
+    override fun onButtonPlayClicked(concert: Concert) {
+
+    }
+
+
+}
+
+
+
+interface BeThereButton{
+    fun onButtonPlayClicked(concert: Concert)
+}
+
+interface CreateConcertList{
+    fun onConcertConstruct(concert: Concert,id:String)
 }
