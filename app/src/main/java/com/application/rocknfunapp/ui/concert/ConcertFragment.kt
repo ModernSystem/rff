@@ -10,20 +10,19 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.application.rocknfunapp.R
 
-class ShareFragment : Fragment() {
+class ConcertFragment : Fragment() {
 
-    private lateinit var shareViewModel: ShareViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        shareViewModel =
-            ViewModelProviders.of(this).get(ShareViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_concert, container, false)
+
+        val view = inflater.inflate(R.layout.fragment_concert, container, false)
 
 
-        return root
+        return view
     }
 }

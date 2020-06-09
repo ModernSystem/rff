@@ -1,43 +1,50 @@
 package com.application.rocknfunapp
 
+import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.navigation.NavigationView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import android.view.Menu
 import android.view.View
 import androidx.annotation.DrawableRes
-import androidx.appcompat.content.res.AppCompatResources.getDrawable
-import androidx.appcompat.widget.SearchView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupWithNavController
 import com.application.rocknfunapp.models.Concert
 import com.application.rocknfunapp.models.Establishment
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.application.rocknfunapp.ui.home.CreateConcertList
+import com.google.android.gms.auth.api.credentials.Credentials
+import com.google.android.gms.auth.api.credentials.CredentialsOptions
+
+import com.google.android.libraries.places.api.Places
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.app_bar_main.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(),CreateConcertList {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private var hashSet= hashSetOf<String>()
+    private val apiKey="AIzaSyBbRXNDchelYnUXcMsjCAUkk4Z8S3N-9KY"
     companion object{
         val establishment= Establishment("Le Nom","7 rue de la place, Brest","06.62.84.12.56","Le bar le nom vous acceuille tout les jours de 18h à " +
-                "1h30 avec grand plaisir. \nA très vite !",null,12)
+                "1h30 avec grand plaisir. \nA très vite !",null,"12")
 
         fun formatDate( date: Date):String{
             val formatDate="dd/MM/YYYY"
@@ -54,10 +61,13 @@ class MainActivity : AppCompatActivity() {
             val timeFormat= SimpleDateFormat(formatTime, Locale.FRANCE)
             return  "${dateFormat.format(date)}|${timeFormat.format(date)}"
         }
-
+        var researchConcertList= mutableListOf<Concert>()
         var goingToConcert= mutableListOf<Concert>()
         val storage=Firebase.storage
         val dataBase=Firebase.firestore
+        private val auth=Firebase.auth
+        var user= auth.currentUser
+
 
     }
 
@@ -66,20 +76,31 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+        if (Intent.ACTION_SEARCH == intent.action) {
+            intent.getStringExtra(SearchManager.QUERY)?.also { query ->
+                search(query,this)
+            }
+        }
+
         val toolbar: Toolbar = findViewById(R.id.toolbar)
-        val appBarLayout:AppBarLayout=findViewById(R.id.appbar_layout)
-
-
-
         setSupportActionBar(toolbar)
 
+        /**
+         * Configure floating action button
+         */
+
         val fab: FloatingActionButton = findViewById(R.id.fab)
+
 
         fab.setOnClickListener { _ ->
             findNavController(R.id.nav_host_fragment).navigate(R.id.nav_NewConcert)
         }
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
 
+        /**
+         *
+         */
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
 
         val navController = findNavController(R.id.nav_host_fragment)
@@ -87,16 +108,28 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(
             topLevelDestinationIds = setOf(
                 R.id.nav_home, R.id.nav_establishment, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_share
+                R.id.nav_share
             ), drawerLayout = drawerLayout
         )
 
-        navView.setupWithNavController(navController)
 
+        Places.initialize(applicationContext, apiKey)
+        val placesClient = Places.createClient(this)
+
+        navView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (user!=null) {
+                navView.menu.findItem(R.id.nav_loginFragment).isVisible = false
+                navView.menu.findItem(R.id.nav_logoutFragment).isVisible = true
+            }
+            else {
+                navView.menu.findItem(R.id.nav_loginFragment).isVisible = true
+                navView.menu.findItem(R.id.nav_logoutFragment).isVisible = false
+            }
+
             when (destination.label) {
                 getString(R.string.menu_home) -> {
-                        fab.show()
+                        configureFab()
                         toolbar.navigationIcon = scaledDrawable(R.drawable.logo, 96, 96)
                 }
 
@@ -104,7 +137,10 @@ class MainActivity : AppCompatActivity() {
                         fab.hide()
                         toolbar.navigationIcon = getDrawable(R.drawable.ic_arrow_back_black_24dp)
                 }
-
+                getString(R.string.menu_search_fragment)->{
+                    fab.hide()
+                    toolbar.navigationIcon = getDrawable(R.drawable.ic_arrow_back_black_24dp)
+                }
                 else ->{
                         fab.hide()
                         toolbar.navigationIcon = scaledDrawable(R.drawable.logo, 96, 96)
@@ -112,14 +148,49 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+        configureFab()
+
 
     }
 
+    private fun search(query: String,listener: CreateConcertList) {
+
+        hashSet= hashSetOf()
+        researchConcertList= mutableListOf()
+        dataBase.collection("Concert")
+            .whereGreaterThanOrEqualTo("artist", query)
+            .get()
+            .addOnSuccessListener { results ->
+                for (document in results){
+                    val concert = document.toObject<Concert>()
+                    concert.id=document.reference.id
+                    listener.onConcertConstruct(concert, document.id)
+                }
+            }
+
+    }
+
+    override fun onConcertConstruct(concert: Concert, id: String) {
+        if (!hashSet.contains(concert.id)) {
+            researchConcertList.add(concert)
+            hashSet.add(concert.id!!)
+        }
+        findNavController(R.id.nav_host_fragment).navigate(R.id.nav_search)
+
+
+        }
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
+
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        (menu.findItem(R.id.action_search).actionView as android.widget.SearchView).apply {
+            // Assumes current activity is the searchable activity
+            setSearchableInfo(searchManager.getSearchableInfo(componentName))
+            isIconifiedByDefault = false // Do not iconify the widget; expand it by default
+        }
         return true
     }
 
@@ -136,6 +207,26 @@ class MainActivity : AppCompatActivity() {
         val bmpScaled = Bitmap.createScaledBitmap(bmp, width, height, false)
         return BitmapDrawable(resources, bmpScaled)
     }
+
+    override fun onBackPressed() {
+        if (findNavController(R.id.nav_host_fragment).currentDestination!!.id== R.id.nav_home) {
+            finish()
+
+        }
+        else {
+            super.onBackPressed()
+        }
+    }
+
+    private fun configureFab(){
+        if (user!=null){
+            fab.visibility= View.VISIBLE
+        }
+        else{
+            fab.visibility=View.GONE
+        }
+    }
+
 
 
 }

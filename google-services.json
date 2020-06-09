@@ -8,18 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:855934641492:android:4d0d7945ccbdf9a40b14c1",
+        "mobilesdk_app_id": "1:855934641492:android:4c90666571c2fb7b0b14c1",
         "android_client_info": {
           "package_name": "com.application.rocknfunapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "855934641492-67kqceqvkf4uo7t2mpl393vg04kfbjj3.apps.googleusercontent.com",
+          "client_id": "855934641492-v9rcrtpmmf9rcrmp6cr7otp5ru1lncp8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.application.rocknfunapp",
-            "certificate_hash": "07930c6587e3f4a127d9613bf0788ebda36bbfde"
+            "certificate_hash": "955c85bf0b93192c447e4062f4747865e4c108d5"
           }
         },
         {
@@ -29,7 +29,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDECykqvA6-Y_wJZVSai1kzZMmXAWH0aoY"
+          "current_key": "AIzaSyBan_gxFSaKvZNeibGPyYMM_f06AK964xg"
         }
       ],
       "services": {

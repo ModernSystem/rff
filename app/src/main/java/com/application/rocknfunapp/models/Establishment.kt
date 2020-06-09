@@ -6,5 +6,5 @@ data class Establishment(
     var contact:String,
     var description:String?,
     var profilePicture:String?,
-    var id:Int
+    var id:String
 )

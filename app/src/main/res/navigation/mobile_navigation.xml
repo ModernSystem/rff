@@ -25,28 +25,39 @@
         android:label="@string/menu_establishment"
         tools:layout="@layout/fragment_establishement" />
 
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.application.rocknfunapp.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+
 
     <fragment
-        android:id="@+id/nav_tools"
-        android:name="com.application.rocknfunapp.ui.tools.ToolsFragment"
-        android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_tools" />
+        android:id="@+id/nav_search"
+        android:name="com.application.rocknfunapp.ui.slideshow.SearchResultFragment"
+        android:label="@string/menu_search_fragment"
+        tools:layout="@layout/fragment_search_result" />
 
     <fragment
-        android:id="@+id/nav_share"
-        android:name="com.application.rocknfunapp.ui.share.ShareFragment"
-        android:label="@string/menu_share"
-        tools:layout="@layout/fragment_share" />
+        android:id="@+id/nav_auth_redirection"
+        android:name="com.application.rocknfunapp.ui.auth.AuthRedirectionFragment"
+        android:label="@string/menu_auth_redirection"
+        tools:layout="@layout/fragment_auth_redirection" />
 
     <fragment
         android:id="@+id/nav_NewConcert"
         android:name="com.application.rocknfunapp.ui.newConcert.NewConcertFragment"
         android:label="@string/menu_create_concert"
-
         tools:layout="@layout/fragment_new_concert" />
+
+    <fragment
+        android:id="@+id/nav_establishmentAuth"
+        android:name="com.application.rocknfunapp.ui.auth.EstablishmentAuthFragment"
+        android:label="@string/menu_profile_settings"
+        tools:layout="@layout/fragment_establishment_auth" />
+    <fragment
+        android:id="@+id/nav_loginFragment"
+        android:name="com.application.rocknfunapp.ui.auth.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/nav_logoutFragment"
+        android:name="com.application.rocknfunapp.ui.auth.LogoutFragment"
+        android:label="fragment_logout"
+        tools:layout="@layout/fragment_logout" />
 </navigation>

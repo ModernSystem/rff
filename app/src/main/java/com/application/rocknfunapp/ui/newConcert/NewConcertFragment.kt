@@ -2,7 +2,6 @@ package com.application.rocknfunapp.ui.newConcert
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -15,19 +14,10 @@ import androidx.navigation.fragment.findNavController
 import com.application.rocknfunapp.MainActivity
 import com.application.rocknfunapp.MainActivity.Companion.dataBase
 import com.application.rocknfunapp.MainActivity.Companion.formatDate
-import com.application.rocknfunapp.MainActivity.Companion.storage
-import com.application.rocknfunapp.models.Artist
+import com.application.rocknfunapp.MainActivity.Companion.user
 import com.application.rocknfunapp.models.Concert
-import com.application.rocknfunapp.models.Establishment
 import com.application.rocknfunapp.R
 import com.application.rocknfunapp.models.GlideApp
-import com.application.rocknfunapp.ui.home.BeThereButton
-import com.bumptech.glide.Glide
-import com.bumptech.glide.Registry
-import com.bumptech.glide.annotation.GlideModule
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.button.MaterialButton
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.io.File
@@ -59,13 +49,13 @@ class NewConcertFragment : Fragment() {
         //Linking widgets
 
         with(view){
-            newConcertName=findViewById(R.id.new_concert_name)
-            newConcertDate=findViewById(R.id.new_concert_date)
-            newConcertPicture=findViewById(R.id.new_concert_picture)
-            newConcertArtist=findViewById(R.id.new_concert_artist)
-            newConcertDescription=findViewById(R.id.new_concert_description)
+            newConcertName=findViewById(R.id.profile_establishment_name)
+            newConcertDate=findViewById(R.id.profile_phone)
+            newConcertPicture=findViewById(R.id.profile_establishment_picture)
+            newConcertArtist=findViewById(R.id.profile_address)
+            newConcertDescription=findViewById(R.id.profile_description)
             okButton=findViewById(R.id.new_concert_ok_button)
-            addImageButton=findViewById(R.id.add_image_button)
+            addImageButton=findViewById(R.id.profile_add_image_button)
 
             val storage=FirebaseStorage.getInstance()
             gsReference = storage.getReferenceFromUrl(getRandomImage())
@@ -170,10 +160,9 @@ class NewConcertFragment : Fragment() {
     private fun configureAndAddConcert(){
         okButton.setOnClickListener {
             if (checkInformation()) {
-                val establishment = MainActivity.establishment
                 val concert = Concert(
                     newConcertName.text.toString(),
-                    "Le Nom",
+                    user!!.uid,
                     calendar.time,
                     newConcertDescription.text.toString(),
                     null,

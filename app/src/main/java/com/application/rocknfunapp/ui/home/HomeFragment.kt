@@ -89,7 +89,7 @@ class HomeFragment : Fragment(),BeThereButton,CreateConcertList {
         if (!hashSet.contains(concert.id)) {
             concertList.add(concert)
             hashSet.add(concert.id!!)
-            Log.d("concert",concert.id!!)
+
         }
 
         concertRecyclerView.adapter!!.notifyDataSetChanged()

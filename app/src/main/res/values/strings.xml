@@ -10,8 +10,8 @@
     <string name="menu_home">Home</string>
     <string name="menu_establishment">My Establishment</string>
     <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
+    <string name="menu_auth">Sign In</string>
+    <string name="menu_search_fragment">Share</string>
     <string name="menu_create_concert">Create new event</string>
     <string name="hello_world">Hello world</string>
     <string name="new_concert_title">Create new event</string>
@@ -35,4 +35,29 @@
     <string name="number_of_people"> %1$d will be there</string>
     <string name="app_label">rffApp</string>
     <string name="search_hint">City, Bar, Artist ?</string>
+    <string name="auth_you_are">Welcome to Rock\'n Fun Factory app.\n Are you :</string>
+    <string name="establishment">An establishment ?</string>
+    <string name="or">or</string>
+    <string name="particular">A particular ?</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="establishment_name">Your establishment name</string>
+    <string name="profile_phone">Phone number</string>
+    <string name="profile_address">Address</string>
+    <string name="profile_description">Description</string>
+    <string name="menu_profile_settings">Profile settings</string>
+    <string name="menu_auth_redirection">auth rediretion fragment</string>
+    <string name="profile_email">E-mail</string>
+    <string name="profile_password">password</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="login">Login</string>
+    <string name="no_account">No account yet ? Create one !</string>
+    <string name="log_out">Logout</string>
 </resources>
