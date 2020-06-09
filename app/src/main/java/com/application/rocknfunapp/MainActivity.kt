@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private var hashSet= hashSetOf<String>()
-    private val apiKey="AIzaSyBbRXNDchelYnUXcMsjCAUkk4Z8S3N-9KY"
     companion object{
         val establishment= Establishment("Le Nom","7 rue de la place, Brest","06.62.84.12.56","Le bar le nom vous acceuille tout les jours de 18h à " +
                 "1h30 avec grand plaisir. \nA très vite !",null,"12")
