@@ -67,7 +67,7 @@ class HomeConcertAdapter(
         fun updateUInitInfo(concert:Concert){
             concertName.text=concert.name
             concertDate.text=formatDate(concert.date!!)
-            concertPlace.text="@"+ concert.establishmentId
+            concertPlace.text="@"+ concert.establishmentName
             concertArtist.text=concert.artist!!
             val storageReference= storage.getReference(concert.image!!)
             GlideApp.with(context.applicationContext).load(storageReference).into(concertImage)

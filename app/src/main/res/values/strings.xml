@@ -58,6 +58,20 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="login">Login</string>
-    <string name="no_account">No account yet ? Create one !</string>
+    <string name="no_account">No account yet ? <font color='#f05545'>Create one !</font> </string>
     <string name="log_out">Logout</string>
+    <string name="choose_name">You must choose a name</string>
+    <string name="choose_address">You must choose an address</string>
+    <string name="choose_phone">You must choose a phone number</string>
+    <string name="choose_description">You must write a description (Opening time, is there food ? …)</string>
+    <string name="choose_email">You must select an email</string>
+    <string name="choose_passord">You must choose a password</string>
+    <string name="problem">A problem occur, please retry</string>
+    <string name="weak_password">Your password is too weak</string>
+    <string name="error_mail_taken">An account with this mail already exist</string>
+    <string name="error_mail_form">Invalid email</string>
+    <string name="error_password_form">min 6 car. required</string>
+    <string name="error_user_not_found">User not found</string>
+    <string name="error_password">Password is invalid</string>
+    <string name="parameters">Parameters</string>
 </resources>

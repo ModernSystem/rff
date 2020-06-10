@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.View
 import androidx.annotation.DrawableRes
@@ -27,6 +28,7 @@ import com.google.android.gms.auth.api.credentials.CredentialsOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -40,11 +42,12 @@ import java.util.*
 class MainActivity : AppCompatActivity(),CreateConcertList {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var navView: NavigationView
     private var hashSet= hashSetOf<String>()
     private val apiKey="AIzaSyBbRXNDchelYnUXcMsjCAUkk4Z8S3N-9KY"
     companion object{
-        val establishment= Establishment("Le Nom","7 rue de la place, Brest","06.62.84.12.56","Le bar le nom vous acceuille tout les jours de 18h à " +
-                "1h30 avec grand plaisir. \nA très vite !",null,"12")
+
+
 
         fun formatDate( date: Date):String{
             val formatDate="dd/MM/YYYY"
@@ -59,14 +62,29 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
             val formatTime="HH:mm"
             val dateFormat= SimpleDateFormat(formatDate, Locale.FRANCE)
             val timeFormat= SimpleDateFormat(formatTime, Locale.FRANCE)
-            return  "${dateFormat.format(date)}|${timeFormat.format(date)}"
+            return  "${dateFormat.format(date)} at ${timeFormat.format(date)}"
         }
+
+
         var researchConcertList= mutableListOf<Concert>()
         var goingToConcert= mutableListOf<Concert>()
         val storage=Firebase.storage
         val dataBase=Firebase.firestore
         private val auth=Firebase.auth
         var user= auth.currentUser
+        var establishment:Establishment?=null
+        val e=if (user!=null){
+            dataBase.collection("user")
+                .whereEqualTo("id",Firebase.auth.currentUser!!.uid)
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        MainActivity.establishment = document.toObject<Establishment>()
+                    }
+                }
+
+        }
+        else null
 
 
     }
@@ -75,6 +93,7 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
 
         if (Intent.ACTION_SEARCH == intent.action) {
@@ -91,8 +110,6 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
          */
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
-
-
         fab.setOnClickListener { _ ->
             findNavController(R.id.nav_host_fragment).navigate(R.id.nav_NewConcert)
         }
@@ -100,39 +117,27 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
         /**
          *
          */
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
 
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        navView= findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
 
         appBarConfiguration = AppBarConfiguration(
             topLevelDestinationIds = setOf(
-                R.id.nav_home, R.id.nav_establishment, R.id.nav_slideshow,
-                R.id.nav_share
+                R.id.nav_home, R.id.nav_establishment
             ), drawerLayout = drawerLayout
         )
 
-
         Places.initialize(applicationContext, apiKey)
-        val placesClient = Places.createClient(this)
 
         navView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (user!=null) {
-                navView.menu.findItem(R.id.nav_loginFragment).isVisible = false
-                navView.menu.findItem(R.id.nav_logoutFragment).isVisible = true
-            }
-            else {
-                navView.menu.findItem(R.id.nav_loginFragment).isVisible = true
-                navView.menu.findItem(R.id.nav_logoutFragment).isVisible = false
-            }
-
+            configureMenuDrawer()
             when (destination.label) {
                 getString(R.string.menu_home) -> {
                         configureFab()
                         toolbar.navigationIcon = scaledDrawable(R.drawable.logo, 96, 96)
                 }
-
                 getString(R.string.menu_create_concert)->{
                         fab.hide()
                         toolbar.navigationIcon = getDrawable(R.drawable.ic_arrow_back_black_24dp)
@@ -148,6 +153,7 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
             }
 
         }
+
         configureFab()
 
 
@@ -219,11 +225,25 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
     }
 
     private fun configureFab(){
+
         if (user!=null){
-            fab.visibility= View.VISIBLE
+            fab.show()
         }
         else{
-            fab.visibility=View.GONE
+            fab.hide()
+        }
+    }
+
+    private fun configureMenuDrawer(){
+        if (user!=null) {
+            navView.menu.findItem(R.id.nav_loginFragment).isVisible = false
+            navView.menu.findItem(R.id.nav_establishment).isVisible = true
+            navView.menu.findItem(R.id.nav_logoutFragment).isVisible = true
+        }
+        else {
+            navView.menu.findItem(R.id.nav_establishment).isVisible = false
+            navView.menu.findItem(R.id.nav_loginFragment).isVisible = true
+            navView.menu.findItem(R.id.nav_logoutFragment).isVisible = false
         }
     }
 

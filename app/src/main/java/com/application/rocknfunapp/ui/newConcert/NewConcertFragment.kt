@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.application.rocknfunapp.MainActivity
 import com.application.rocknfunapp.MainActivity.Companion.dataBase
+import com.application.rocknfunapp.MainActivity.Companion.e
+import com.application.rocknfunapp.MainActivity.Companion.establishment
 import com.application.rocknfunapp.MainActivity.Companion.formatDate
 import com.application.rocknfunapp.MainActivity.Companion.user
 import com.application.rocknfunapp.models.Concert
@@ -167,7 +169,10 @@ class NewConcertFragment : Fragment() {
                     newConcertDescription.text.toString(),
                     null,
                     newConcertArtist.text.toString(),
-                    0)
+                    0,
+                    null,
+                    establishment!!.name
+                )
 
 
                 concert.image= addConcertToFirebase(concert)

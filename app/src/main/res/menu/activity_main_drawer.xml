@@ -12,26 +12,20 @@
             android:id="@+id/nav_establishment"
             android:icon="@drawable/ic_establishment"
             android:title="@string/menu_establishment" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
-        <item
-            android:id="@+id/nav_loginFragment"
-            android:icon="@drawable/ic_sign_in"
-            android:title="@string/menu_auth" />
-        <item
-            android:id="@+id/nav_logoutFragment"
-            android:icon="@drawable/ic_baseline_backspace_24"
-            android:title="@string/log_out" />
+
+
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/parameters">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/menu_search_fragment" />
+                android:id="@+id/nav_loginFragment"
+                android:icon="@drawable/ic_sign_in"
+                android:title="@string/menu_auth" />
+            <item
+                android:id="@+id/nav_logoutFragment"
+                android:icon="@drawable/ic_baseline_backspace_24"
+                android:title="@string/log_out" />
         </menu>
     </item>
 

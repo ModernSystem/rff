@@ -1,25 +1,18 @@
 package com.application.rocknfunapp.ui.home
 
-import android.os.AsyncTask
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.application.rocknfunapp.controller.HomeConcertAdapter
 import com.application.rocknfunapp.MainActivity
 import com.application.rocknfunapp.models.Concert
 import com.application.rocknfunapp.R
-import com.application.rocknfunapp.ui.establishment.EstablishmentViewModel
 import com.google.firebase.firestore.ktx.toObject
-import kotlinx.android.synthetic.main.nav_header_main.*
-import kotlinx.coroutines.*
-import kotlin.coroutines.CoroutineContext
 
 class HomeFragment : Fragment(),BeThereButton,CreateConcertList {
 

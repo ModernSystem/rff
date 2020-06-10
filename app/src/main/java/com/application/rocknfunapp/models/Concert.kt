@@ -14,6 +14,7 @@ data class Concert(
     var image: String?=null,
     var artist: String?=null,
     var nbOfParticipant:Int?=null,
-    var id:String?=null
+    var id:String?=null,
+    var establishmentName:String?=null
 ){
 }

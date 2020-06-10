@@ -12,6 +12,7 @@ import com.application.rocknfunapp.MainActivity
 import com.application.rocknfunapp.MainActivity.Companion.user
 
 import com.application.rocknfunapp.R
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -58,9 +59,27 @@ class LoginFragment : Fragment() {
                         email.text.toString(),
                         password.text.toString()
                     ).addOnCompleteListener {
-                        user=Firebase.auth.currentUser
-                        findNavController().navigate(R.id.nav_home)
+                        if (it.isSuccessful) {
+                            user = Firebase.auth.currentUser
+                            findNavController().navigate(R.id.nav_home)
+                        }
 
+                    }.addOnFailureListener {
+                        it as FirebaseAuthException
+                        when (it.errorCode) {
+                            "ERROR_USER_NOT_FOUND" -> {
+                                email.error = getString(R.string.error_user_not_found)
+                                email.requestFocus()
+                            }
+                            "ERROR_INVALID_EMAIL" -> {
+                                email.error = getString(R.string.error_mail_form)
+                                email.requestFocus()
+                            }
+                            "ERROR_WRONG_PASSWORD" -> {
+                                password.error = getString(R.string.error_password)
+                                password.requestFocus()
+                            }
+                        }
                     }
 
                 }

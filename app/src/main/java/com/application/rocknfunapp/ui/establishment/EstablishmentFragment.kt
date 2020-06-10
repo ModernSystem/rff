@@ -15,10 +15,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.application.rocknfunapp.controller.ComingConcertAdapter
 import com.application.rocknfunapp.MainActivity
+import com.application.rocknfunapp.MainActivity.Companion.establishment
 import com.application.rocknfunapp.models.Concert
 import com.application.rocknfunapp.R
+import com.application.rocknfunapp.models.Establishment
+import com.application.rocknfunapp.models.GlideApp
 import com.application.rocknfunapp.ui.home.CreateConcertList
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 
 class EstablishmentFragment : Fragment(),CreateConcertList {
 
@@ -65,6 +71,7 @@ class EstablishmentFragment : Fragment(),CreateConcertList {
     private fun getConcertList(listener: CreateConcertList){
         concertList= mutableListOf()
         MainActivity.dataBase.collection("Concert")
+            .whereEqualTo("establishmentId",Firebase.auth.currentUser!!.uid)
             .get()
             .addOnSuccessListener {result->
                 for (document in result){
@@ -83,23 +90,14 @@ class EstablishmentFragment : Fragment(),CreateConcertList {
     }
 
     private fun configureUi() {
-        val viewModel = ViewModelProviders.of(this).get(EstablishmentViewModel::class.java)
-        viewModel.name.observe(viewLifecycleOwner, Observer {
-            name.text = it
-        })
-        viewModel.address.observe(viewLifecycleOwner, Observer {
-            address.text = it
-        })
-        viewModel.contact.observe(viewLifecycleOwner, Observer {
-            contact.text = it
-        })
-        viewModel.description.observe(viewLifecycleOwner, Observer {
-            description.text=it
-        })
-        profilPicture.setImageResource(R.drawable.defaut_2)
 
-
-
+                    name.text = establishment!!.name
+                    address.text = establishment!!.location
+                    contact.text = establishment!!.contact
+                    description.text=establishment!!.description
+                    GlideApp.with(this)
+                        .load(MainActivity.storage.getReference(establishment!!.profilePicture!!))
+                        .into(profilPicture)
 
     }
 }

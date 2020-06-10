@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/concert_to_come_item_artist"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="@string/hello_world"
         app:layout_constraintTop_toBottomOf="@id/concert_to_come_item_picture"
