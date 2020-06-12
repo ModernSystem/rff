@@ -74,4 +74,9 @@
     <string name="error_user_not_found">User not found</string>
     <string name="error_password">Password is invalid</string>
     <string name="parameters">Parameters</string>
+    <string name="parameter">Parameter</string>
+    <string name="save_modifification">Save Modification</string>
+    <string name="change_image">Change image</string>
+    <string name="modification_complete">Your modification have been saved</string>
+    <string name="modification_fail">A probleme occur, please retry later</string>
 </resources>

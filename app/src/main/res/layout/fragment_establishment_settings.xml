@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:id="@+id/layout"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingBottom="?attr/actionBarSize">
@@ -10,7 +11,7 @@
     <ScrollView
         android:id="@+id/scrollView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/new_concert_ok_button"
+        app:layout_constraintBottom_toTopOf="@+id/establishment_settings_save_button"
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
@@ -23,7 +24,7 @@
                 android:id="@+id/establishment_settings_image_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/insert_new_image"
+                android:text="@string/change_image"
                 android:textSize="15sp"
                 android:paddingHorizontal="@dimen/margin_20dp"
                 android:background="@drawable/rounded_button"
@@ -49,7 +50,7 @@
                     android:id="@+id/establishment_settings_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/title"
+                    android:hint="@string/establishment_name"
                     android:inputType="text"
                     android:singleLine="false" />
 
@@ -68,12 +69,10 @@
                     android:id="@+id/establishment_settings_phone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:clickable="true"
-                    android:focusable="false"
-                    android:hint="@string/date"
-                    android:drawableStart="@drawable/ic_calendar_today_24px"
+                    android:hint="@string/profile_phone"
+                    android:drawableStart="@drawable/ic_call_24px"
                     android:drawablePadding="@dimen/margin_5dp"
-                    android:inputType="text"
+                    android:inputType="phone"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -96,12 +95,15 @@
                 app:layout_constraintRight_toRightOf="@id/establishment_settings_description_layout"
                 app:layout_constraintTop_toBottomOf="@id/establishment_settings_phone_layout">
 
-                <AutoCompleteTextView
+                <EditText
                     android:id="@+id/establishment_settings_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/artist"
-                    android:drawableStart="@drawable/ic_album_24px"
+                    android:hint="@string/profile_address"
+                    android:inputType="text"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:drawableStart="@drawable/ic_location_on_24px"
                     android:drawablePadding="@dimen/margin_5dp"/>
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -117,7 +119,7 @@
                     android:id="@+id/establishment_settings_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/description"
+                    android:hint="@string/profile_description"
                     android:drawableStart="@drawable/ic_mode_comment_24px"
                     android:drawablePadding="@dimen/margin_5dp"/>
 
@@ -126,20 +128,26 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+
+
+
     </ScrollView>
 
     <Button
-        app:layout_constraintTop_toBottomOf="@id/scrollView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:id="@+id/new_concert_ok_button"
+        app:layout_constraintBottom_toBottomOf="@id/layout"
+        android:id="@+id/establishment_settings_save_button"
         android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:text="@string/create"
+        android:text="@string/save_modifification"
         android:textAllCaps="false"
         android:layout_margin="@dimen/margin_20dp"
         android:backgroundTint="@color/colorAccent"
         android:background="@drawable/rounded_button" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
 
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

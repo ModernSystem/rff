@@ -7,4 +7,10 @@
         app:showAsAction="collapseActionView|ifRoom"
         app:actionViewClass="android.widget.SearchView"
         />
+
+    <item android:id="@+id/parameter"
+        android:title="@string/parameter"
+        android:icon="@drawable/ic_baseline_settings_24"
+        app:showAsAction="collapseActionView|ifRoom"
+        />
 </menu>

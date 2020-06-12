@@ -60,4 +60,9 @@
         android:name="com.application.rocknfunapp.ui.auth.LogoutFragment"
         android:label="fragment_logout"
         tools:layout="@layout/fragment_logout" />
+    <fragment
+        android:id="@+id/nav_establishmentSettingsFragment"
+        android:name="com.application.rocknfunapp.ui.establishment.EstablishmentSettingsFragment"
+        android:label="fragment_establishment_settings"
+        tools:layout="@layout/fragment_establishment_settings" />
 </navigation>

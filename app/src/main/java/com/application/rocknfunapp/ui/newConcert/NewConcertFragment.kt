@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.application.rocknfunapp.MainActivity
 import com.application.rocknfunapp.MainActivity.Companion.dataBase
-import com.application.rocknfunapp.MainActivity.Companion.e
 import com.application.rocknfunapp.MainActivity.Companion.establishment
 import com.application.rocknfunapp.MainActivity.Companion.formatDate
 import com.application.rocknfunapp.MainActivity.Companion.user
@@ -51,13 +50,13 @@ class NewConcertFragment : Fragment() {
         //Linking widgets
 
         with(view){
-            newConcertName=findViewById(R.id.profile_establishment_name)
-            newConcertDate=findViewById(R.id.profile_phone)
-            newConcertPicture=findViewById(R.id.profile_establishment_picture)
-            newConcertArtist=findViewById(R.id.profile_address)
-            newConcertDescription=findViewById(R.id.profile_description)
+            newConcertName=findViewById(R.id.establishment_settings_name)
+            newConcertDate=findViewById(R.id.establishment_settings_phone)
+            newConcertPicture=findViewById(R.id.establishment_settings_picture)
+            newConcertArtist=findViewById(R.id.establishment_settings_address)
+            newConcertDescription=findViewById(R.id.establishment_settings_description)
             okButton=findViewById(R.id.new_concert_ok_button)
-            addImageButton=findViewById(R.id.profile_add_image_button)
+            addImageButton=findViewById(R.id.establishment_settings_image_button)
 
             val storage=FirebaseStorage.getInstance()
             gsReference = storage.getReferenceFromUrl(getRandomImage())

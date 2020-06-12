@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navView: NavigationView
     private var hashSet= hashSetOf<String>()
+
     companion object{
 
 
@@ -67,23 +69,27 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
 
         var researchConcertList= mutableListOf<Concert>()
         var goingToConcert= mutableListOf<Concert>()
+        var userDocId=""
         val storage=Firebase.storage
         val dataBase=Firebase.firestore
         private val auth=Firebase.auth
         var user= auth.currentUser
         var establishment:Establishment?=null
-        val e=if (user!=null){
-            dataBase.collection("user")
-                .whereEqualTo("id",Firebase.auth.currentUser!!.uid)
-                .get()
-                .addOnSuccessListener { result ->
-                    for (document in result) {
-                        MainActivity.establishment = document.toObject<Establishment>()
-                    }
-                }
+        fun getEstablishment() {
+            val e = if (user != null) {
+                dataBase.collection("user")
+                    .whereEqualTo("id", Firebase.auth.currentUser!!.uid)
+                    .get()
+                    .addOnSuccessListener { result ->
+                        for (document in result) {
+                            MainActivity.establishment = document.toObject<Establishment>()
+                            userDocId = document.id
 
+                        }
+                    }
+
+            } else null
         }
-        else null
 
 
     }
@@ -92,7 +98,7 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        getEstablishment()
 
 
         if (Intent.ACTION_SEARCH == intent.action) {
@@ -131,6 +137,7 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
 
         navView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            invalidateOptionsMenu()
             configureMenuDrawer()
             when (destination.label) {
                 getString(R.string.menu_home) -> {
@@ -189,17 +196,26 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
-
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        (menu.findItem(R.id.action_search).actionView as android.widget.SearchView).apply {
-            // Assumes current activity is the searchable activity
-            setSearchableInfo(searchManager.getSearchableInfo(componentName))
-            isIconifiedByDefault = false // Do not iconify the widget; expand it by default
+        if (findNavController(R.id.nav_host_fragment).currentDestination!!.id== R.id.nav_home){
+            menu.findItem(R.id.parameter).isVisible=false
+            val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+            (menu.findItem(R.id.action_search).actionView as android.widget.SearchView).apply {
+                setSearchableInfo(searchManager.getSearchableInfo(componentName))
+                isIconifiedByDefault = false // Do not iconify the widget; expand it by default
+            }
+        }
+        else {
+            menu.removeItem(R.id.action_search)
         }
         return true
     }
 
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            R.id.parameter-> findNavController(R.id.nav_host_fragment).navigate(R.id.nav_establishmentSettingsFragment)
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)

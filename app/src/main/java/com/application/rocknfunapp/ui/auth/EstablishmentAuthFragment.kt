@@ -1,12 +1,10 @@
 package com.application.rocknfunapp.ui.auth
 
-import android.R.attr
 import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,20 +15,16 @@ import com.application.rocknfunapp.MainActivity
 import com.application.rocknfunapp.MainActivity.Companion.dataBase
 import com.application.rocknfunapp.MainActivity.Companion.user
 import com.application.rocknfunapp.R
-import com.application.rocknfunapp.models.Concert
 import com.application.rocknfunapp.models.Establishment
-import com.firebase.ui.auth.FirebaseUiUserCollisionException
+import com.application.rocknfunapp.models.GlideApp
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-import com.google.firebase.FirebaseError.ERROR_EMAIL_ALREADY_IN_USE
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 import java.io.File
-import java.lang.Exception
 
 
 class EstablishmentAuthFragment : Fragment() {
@@ -60,17 +54,18 @@ class EstablishmentAuthFragment : Fragment() {
         // Inflate the layout for this fragment
         val view= inflater.inflate(R.layout.fragment_establishment_auth, container, false)
         with (view){
-            profileAddress=findViewById(R.id.profile_address)
-            createButton=findViewById(R.id.profile_create_button)
+            profileAddress=findViewById(R.id.establishment_settings_address)
+            createButton=findViewById(R.id.establishment_settings_save_button)
             emailField=findViewById(R.id.profile_email)
             passwordField=findViewById(R.id.profile_password)
-            name=findViewById(R.id.profile_establishment_name)
-            phone=findViewById(R.id.profile_phone)
-            addPictureButton=findViewById(R.id.profile_add_image_button)
-            description=findViewById(R.id.profile_description)
-            profilPicture=findViewById(R.id.profile_establishment_picture)
+            name=findViewById(R.id.establishment_settings_name)
+            phone=findViewById(R.id.establishment_settings_phone)
+            addPictureButton=findViewById(R.id.establishment_settings_image_button)
+            description=findViewById(R.id.establishment_settings_description)
+            profilPicture=findViewById(R.id.establishment_settings_picture)
 
         }
+        GlideApp.with(this).load(MainActivity.storage.getReference("/Default concert images/default_4.jpg")).into(profilPicture)
         auth= Firebase.auth
         configureAddress()
         configureCreateButton()
@@ -219,7 +214,7 @@ class EstablishmentAuthFragment : Fragment() {
             val imageRef = storageRef.child("image/profilePicture/${file.name}(${variable})")
             var uploadTask = imageRef.putFile(uri!!)
             imageRef.path
-        } else "/Default concert images/default_4.jpg"
+        } else  "/Default concert images/default_4.jpg"
 
     }
 }
