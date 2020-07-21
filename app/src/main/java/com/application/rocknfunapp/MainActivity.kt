@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navView: NavigationView
     private var hashSet= hashSetOf<String>()
-    private val apiKey="AIzaSyDdLLDK1T1j8PiFpPlGH5Eqs3VnK3ZmHqc"
+    private val apiKey=""
     companion object{
 
 
