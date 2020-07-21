@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -27,6 +28,7 @@ import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.CredentialsOptions
 
 import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -45,7 +47,7 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navView: NavigationView
     private var hashSet= hashSetOf<String>()
-
+    private val apiKey="AIzaSyDdLLDK1T1j8PiFpPlGH5Eqs3VnK3ZmHqc"
     companion object{
 
 
@@ -72,11 +74,12 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
         var userDocId=""
         val storage=Firebase.storage
         val dataBase=Firebase.firestore
-        private val auth=Firebase.auth
+        val auth=Firebase.auth
         var user= auth.currentUser
         var establishment:Establishment?=null
+        var userEstablishment=false
         fun getEstablishment() {
-            val e = if (user != null) {
+            if (user != null) {
                 dataBase.collection("user")
                     .whereEqualTo("id", Firebase.auth.currentUser!!.uid)
                     .get()
@@ -88,24 +91,39 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
                         }
                     }
 
-            } else null
+            } else {
+                null
+            }
         }
+
+
+        var placesClient:PlacesClient?=null
+
 
 
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (user != null) {
+            dataBase.collection("user")
+                .whereEqualTo("id", Firebase.auth.currentUser!!.uid)
+                .get()
+                .addOnSuccessListener {
+                    if (!it.isEmpty) {
+                        userEstablishment = true
+                        getEstablishment()
+                        invalidateOptionsMenu()
+                        configureMenuDrawer()
+                    }
+                }
+        }
+        setTheme(R.style.AppTheme_NoActionBar)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        getEstablishment()
 
 
-        if (Intent.ACTION_SEARCH == intent.action) {
-            intent.getStringExtra(SearchManager.QUERY)?.also { query ->
-                search(query,this)
-            }
-        }
+
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -134,6 +152,8 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
         )
 
         Places.initialize(applicationContext, apiKey)
+        placesClient=Places.createClient(this)
+
 
         navView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -159,7 +179,6 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
             }
 
         }
-
         configureFab()
 
 
@@ -241,7 +260,7 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
 
     private fun configureFab(){
 
-        if (user!=null){
+        if (user!=null && userEstablishment ){
             fab.show()
         }
         else{
@@ -250,9 +269,14 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
     }
 
     private fun configureMenuDrawer(){
-        if (user!=null) {
+        if (user!=null && userEstablishment) {
             navView.menu.findItem(R.id.nav_loginFragment).isVisible = false
             navView.menu.findItem(R.id.nav_establishment).isVisible = true
+            navView.menu.findItem(R.id.nav_logoutFragment).isVisible = true
+        }
+        else if (user!=null && !userEstablishment) {
+            navView.menu.findItem(R.id.nav_loginFragment).isVisible = false
+            navView.menu.findItem(R.id.nav_establishment).isVisible = false
             navView.menu.findItem(R.id.nav_logoutFragment).isVisible = true
         }
         else {

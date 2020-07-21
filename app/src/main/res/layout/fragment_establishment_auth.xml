@@ -23,8 +23,10 @@
                     android:id="@+id/establishment_settings_image_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/insert_new_image"
+                    android:text="@string/change_image"
                     android:textSize="15sp"
+                    android:visibility="gone"
+
                     android:paddingHorizontal="@dimen/margin_20dp"
                     android:background="@drawable/rounded_button"
                     android:elevation="5dp"
@@ -49,8 +51,13 @@
                         android:id="@+id/establishment_settings_name"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="@string/establishment_name"
+                        android:hint="@string/establishment_name_research"
                         android:inputType="text"
+                        android:drawableStart="@drawable/ic_search_24px"
+                        android:drawableTint="@android:color/black"
+                        android:focusable="false"
+                        android:backgroundTint="@color/colorAccent"
+                        android:clickable="true"
                         android:singleLine="false" />
 
                 </com.google.android.material.textfield.TextInputLayout>

@@ -12,6 +12,7 @@ import com.application.rocknfunapp.controller.HomeConcertAdapter
 import com.application.rocknfunapp.MainActivity
 import com.application.rocknfunapp.models.Concert
 import com.application.rocknfunapp.R
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.firestore.ktx.toObject
 
 class HomeFragment : Fragment(),BeThereButton,CreateConcertList {
@@ -35,9 +36,6 @@ class HomeFragment : Fragment(),BeThereButton,CreateConcertList {
         getConcertList(this)
         configureWaitingImage()
         configureRecyclerView()
-
-
-
 
         return view
     }
@@ -100,6 +98,7 @@ class HomeFragment : Fragment(),BeThereButton,CreateConcertList {
     override fun onButtonPlayClicked(concert: Concert) {
 
     }
+
 
 
 }

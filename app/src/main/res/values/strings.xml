@@ -79,4 +79,7 @@
     <string name="change_image">Change image</string>
     <string name="modification_complete">Your modification have been saved</string>
     <string name="modification_fail">A probleme occur, please retry later</string>
+    <string name="establishment_name_research">Research your establishment</string>
+    <string name="verification_mail">A verification mail has been sent</string>
+    <string name="auth_error">An error occur, please retry</string>
 </resources>

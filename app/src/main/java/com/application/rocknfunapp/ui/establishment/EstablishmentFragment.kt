@@ -85,11 +85,11 @@ class EstablishmentFragment : Fragment(),CreateConcertList {
     override fun onConcertConstruct(concert: Concert, id: String) {
         concertList.add(concert)
         recyclerView.adapter!!.notifyDataSetChanged()
-        Log.d("TAAAAAAAAAAAAAAAAAAAAAAAAAAAG", concertList.toString())
 
     }
 
     private fun configureUi() {
+
 
                     name.text = establishment!!.name
                     address.text = establishment!!.location

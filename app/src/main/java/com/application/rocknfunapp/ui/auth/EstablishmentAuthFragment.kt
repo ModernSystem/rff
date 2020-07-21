@@ -3,28 +3,42 @@ package com.application.rocknfunapp.ui.auth
 import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.application.rocknfunapp.MainActivity
 import com.application.rocknfunapp.MainActivity.Companion.dataBase
+import com.application.rocknfunapp.MainActivity.Companion.placesClient
 import com.application.rocknfunapp.MainActivity.Companion.user
 import com.application.rocknfunapp.R
 import com.application.rocknfunapp.models.Establishment
 import com.application.rocknfunapp.models.GlideApp
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.PhotoMetadata
 import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FetchPhotoRequest
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-import com.google.firebase.auth.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.util.*
 
 
 class EstablishmentAuthFragment : Fragment() {
@@ -40,11 +54,12 @@ class EstablishmentAuthFragment : Fragment() {
     private lateinit var profilPicture:ImageView
     private lateinit var auth:FirebaseAuth
     private var uri: Uri?=null
+    private var imageFound=false
     private val AUTOCOMPLETE_REQUEST_CODE=254
     private val PICK_REQUEST_CODE=586
 
     var fields: List<Place.Field> =
-        listOf(Place.Field.ID,Place.Field.ADDRESS)
+        listOf(Place.Field.ID,Place.Field.ADDRESS,Place.Field.PHOTO_METADATAS,Place.Field.NAME,Place.Field.PHONE_NUMBER,Place.Field.OPENING_HOURS)
 
 
     override fun onCreateView(
@@ -65,7 +80,7 @@ class EstablishmentAuthFragment : Fragment() {
             profilPicture=findViewById(R.id.establishment_settings_picture)
 
         }
-        GlideApp.with(this).load(MainActivity.storage.getReference("/Default concert images/default_4.jpg")).into(profilPicture)
+        GlideApp.with(this).load(MainActivity.storage.getReferenceFromUrl("https://firebasestorage.googleapis.com/v0/b/rocknfunapp.appspot.com/o/image%2FdefaultConcert%2Fbuildings-1245953_1920%20(1).jpg?alt=media&token=2fc087e8-c086-460a-9cc7-4fe93dad741b")).into(profilPicture)
         auth= Firebase.auth
         configureAddress()
         configureCreateButton()
@@ -80,7 +95,7 @@ class EstablishmentAuthFragment : Fragment() {
     }
 
     private fun configureAddress(){
-        profileAddress.setOnClickListener {
+        name.setOnClickListener {
             val intent: Intent = Autocomplete.IntentBuilder(
                 AutocompleteActivityMode.FULLSCREEN, fields
             )
@@ -101,6 +116,7 @@ class EstablishmentAuthFragment : Fragment() {
 
                     if (task.isSuccessful) {
                         auth.signInWithEmailAndPassword(email, password)
+                        auth.currentUser!!.sendEmailVerification()
                         user = auth.currentUser
                         val establishment = Establishment(
                             name.text.toString(),
@@ -111,6 +127,8 @@ class EstablishmentAuthFragment : Fragment() {
                             auth.currentUser!!.uid
                         )
                         dataBase.collection("user").add(establishment)
+                        auth.signOut()
+                        Toast.makeText(requireContext(),R.string.verification_mail,Toast.LENGTH_LONG).show()
                         findNavController().navigate(R.id.nav_home)
                     }
                 }.addOnFailureListener {
@@ -185,6 +203,37 @@ class EstablishmentAuthFragment : Fragment() {
             if (resultCode == RESULT_OK && data!=null) {
                 val place = Autocomplete.getPlaceFromIntent(data)
                 profileAddress.setText(place.address )
+                name.setText(place.name)
+                phone.setText(place.phoneNumber)
+                addPictureButton.visibility=View.VISIBLE
+
+                val field: List<Place.Field> = listOf(Place.Field.PHOTO_METADATAS)
+
+
+                val placeRequest = FetchPlaceRequest.newInstance(place.id.toString(), field)
+
+                placesClient!!.fetchPlace(placeRequest).addOnSuccessListener { response ->
+                    val placeD: Place = response.place
+
+                    // Get the photo metadata.
+                    val photoMetadata: PhotoMetadata = placeD.photoMetadatas!![0]
+
+                    // Get the attribution text.
+                    val attributions: String = photoMetadata.attributions
+
+                    // Create a FetchPhotoRequest.
+                    val photoRequest = FetchPhotoRequest.builder(photoMetadata)
+                        .build()
+                    placesClient!!.fetchPhoto(photoRequest)
+                        .addOnSuccessListener { fetchPhotoResponse ->
+                            val bitmap: Bitmap = fetchPhotoResponse.bitmap
+                            profilPicture.setImageBitmap(bitmap)
+                            imageFound=true
+
+                        }
+                }
+
+
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
 
                 val status  = Autocomplete.getStatusFromIntent(data!!)
@@ -214,7 +263,21 @@ class EstablishmentAuthFragment : Fragment() {
             val imageRef = storageRef.child("image/profilePicture/${file.name}(${variable})")
             var uploadTask = imageRef.putFile(uri!!)
             imageRef.path
-        } else  "/Default concert images/default_4.jpg"
+        } else if (imageFound){
+            val variable = System.currentTimeMillis()
+            val storageRef = MainActivity.storage.reference
+            val imageRef = storageRef.child("image/profilePicture/(${variable})")
+            profilPicture.isDrawingCacheEnabled = true
+            profilPicture.buildDrawingCache()
+            val bitmap = (profilPicture.drawable as BitmapDrawable).bitmap
+            val baos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            val data = baos.toByteArray()
+            var uploadTask = imageRef.putBytes(data)
+            return imageRef.path
+        } else "/Default concert images/default_4.jpg"
 
     }
 }
+
+

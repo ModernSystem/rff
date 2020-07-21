@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "444626186490",
+    "firebase_url": "https://rocknfunapp.firebaseio.com",
+    "project_id": "rocknfunapp",
+    "storage_bucket": "rocknfunapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444626186490:android:3d4969358cf81b09269943",
+        "android_client_info": {
+          "package_name": "com.application.rocknfunapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "444626186490-bbmern8ltoma22bkktq4vg9kd5rv90sh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.application.rocknfunapp",
+            "certificate_hash": "955c85bf0b93192c447e4062f4747865e4c108d5"
+          }
+        },
+        {
+          "client_id": "444626186490-50le6avvn025va83g0l5gnjdhpt1re6q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhHZi0aiCWp2Tn6xpuWIAZONkEwXgr_0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "444626186490-50le6avvn025va83g0l5gnjdhpt1re6q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

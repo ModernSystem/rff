@@ -1,5 +1,7 @@
 package com.application.rocknfunapp.ui.auth
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,8 +11,13 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.fragment.findNavController
+import com.application.rocknfunapp.MainActivity
+import com.application.rocknfunapp.MainActivity.Companion.auth
 import com.application.rocknfunapp.MainActivity.Companion.user
 import com.application.rocknfunapp.R
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
+import com.google.firebase.auth.FirebaseAuth
 
 
 class AuthRedirectionFragment : Fragment() {
@@ -19,6 +26,10 @@ class AuthRedirectionFragment : Fragment() {
     private lateinit var buttonLayout: ConstraintLayout
     private lateinit var establishmentButton: Button
     private lateinit var particularButton: Button
+    private val RC_SIGN_IN=25556
+    private val providers = arrayListOf(
+        AuthUI.IdpConfig.EmailBuilder().build(),
+        AuthUI.IdpConfig.GoogleBuilder().build())
 
 
     override fun onCreateView(
@@ -46,10 +57,29 @@ class AuthRedirectionFragment : Fragment() {
         }
 
         particularButton.setOnClickListener {
-            findNavController().navigate(R.id.nav_home)
-            Toast.makeText(requireContext(),"Welcome to the community", Toast.LENGTH_LONG).show()
+            startActivityForResult(
+                AuthUI.getInstance()
+                    .createSignInIntentBuilder()
+                    .setAvailableProviders(providers)
+                    .build(),
+                RC_SIGN_IN)
         }
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN) {
+            val response = IdpResponse.fromResultIntent(data)
+            if (resultCode == Activity.RESULT_OK) {
+                auth.currentUser!!.sendEmailVerification()
+                user = auth.currentUser
+                findNavController().navigate(R.id.nav_home)
+            } else {
+                Toast.makeText(requireContext(),R.string.auth_error,Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 

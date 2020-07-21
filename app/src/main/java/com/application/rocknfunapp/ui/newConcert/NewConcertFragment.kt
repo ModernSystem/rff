@@ -81,10 +81,10 @@ class NewConcertFragment : Fragment() {
 
     private fun getRandomImage():String{
         val list= mutableListOf<String>(
-            "https://firebasestorage.googleapis.com/v0/b/amiable-dynamo-271413.appspot.com/o/Default%20concert%20images%2Fdefault_1.jpg?alt=media&token=9238c6b3-d230-412d-ad4e-d9a640378b02",
-            "https://firebasestorage.googleapis.com/v0/b/amiable-dynamo-271413.appspot.com/o/Default%20concert%20images%2Fdefault_2.jpg?alt=media&token=952c7c33-6429-4152-a64e-fb6d1095206f",
-            "https://firebasestorage.googleapis.com/v0/b/amiable-dynamo-271413.appspot.com/o/Default%20concert%20images%2Fdefault_3.jpg?alt=media&token=60a872b7-0e46-4d8c-86fc-178823787ee0",
-            "https://firebasestorage.googleapis.com/v0/b/amiable-dynamo-271413.appspot.com/o/Default%20concert%20images%2Fdefault_4.jpg?alt=media&token=77ffd66d-922c-4f63-8886-a498a15f5bf0"
+            "https://firebasestorage.googleapis.com/v0/b/rocknfunapp.appspot.com/o/image%2FdefaultConcert%2Fadmission-2974645_1920%20(1).jpg?alt=media&token=ed12dbe5-da4e-4d08-873e-5c2ac3aa4ff5",
+            "https://firebasestorage.googleapis.com/v0/b/rocknfunapp.appspot.com/o/image%2FdefaultConcert%2Fconcert-1129966_1920.jpg?alt=media&token=144d47b7-8b80-47fc-b9ab-c1feca2600cc",
+            "https://firebasestorage.googleapis.com/v0/b/rocknfunapp.appspot.com/o/image%2FdefaultConcert%2Fconcert-336695_1920.jpg?alt=media&token=01b1b0d7-70bd-4d8c-bf06-8e56fd95da1d",
+            "https://firebasestorage.googleapis.com/v0/b/rocknfunapp.appspot.com/o/image%2FdefaultConcert%2Fcrowd-1056764_1920%20(1).jpg?alt=media&token=73d8a4eb-6dd8-4ad4-87de-5bc27cb97ab1"
         )
         list.shuffle()
         return list[0]

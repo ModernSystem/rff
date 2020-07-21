@@ -12,6 +12,7 @@ import com.application.rocknfunapp.MainActivity
 import com.application.rocknfunapp.MainActivity.Companion.user
 
 import com.application.rocknfunapp.R
+import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -79,6 +80,7 @@ class LoginFragment : Fragment() {
                                 password.error = getString(R.string.error_password)
                                 password.requestFocus()
                             }
+
                         }
                     }
 
