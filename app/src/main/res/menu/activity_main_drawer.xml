@@ -13,6 +13,11 @@
             android:icon="@drawable/ic_establishment"
             android:title="@string/menu_establishment" />
 
+        <item
+            android:id="@+id/nav_wishListFragment"
+            android:icon="@drawable/ic_wishlist"
+            android:title="@string/menu_wishlist" />
+
 
     </group>
 

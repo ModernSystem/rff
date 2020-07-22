@@ -77,7 +77,7 @@
         android:layout_height="35dp"
         android:layout_marginTop="@dimen/concert_text_margin"
         android:background="@drawable/rounded_button"
-        android:text="@string/be_there"
+        android:text="@string/add_to_wishlist"
         android:textSize="12sp"
         android:textAlignment="gravity"
         android:textAllCaps="false"

@@ -38,7 +38,7 @@ class HomeConcertAdapter(
         if (concertList.isNotEmpty())
         holder.updateUInitInfo(concertList[position])
         holder.button.setOnClickListener {
-            buttonListener.onButtonPlayClicked(concertList[position])
+            buttonListener.onButtonPlayClicked(concertList[position],position)
         }
     }
 
@@ -78,11 +78,15 @@ class HomeConcertAdapter(
         }
 
         private fun updateButtonUi(concert: Concert){
-            if (MainActivity.goingToConcert.contains(concert)){
-                button.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_done_black_24dp,0)
+            if (MainActivity.goingToConcert.contains(concert.id)){
+                button.setText(R.string.be_there)
+                button.setBackgroundResource(R.drawable.rounded_button_red)
             }
             else{
-                button.setCompoundDrawables(null,null,null,null)
+                button.setBackgroundResource(R.drawable.rounded_button)
+                button.setText(R.string.add_to_wishlist)
+
+
             }
         }
     }

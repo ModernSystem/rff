@@ -175,8 +175,9 @@ class NewConcertFragment : Fragment() {
 
 
                 concert.image= addConcertToFirebase(concert)
-                dataBase.collection("Concert").add(concert)
-                MainActivity.goingToConcert.add(concert)
+                dataBase.collection("Concert").add(concert).addOnSuccessListener {
+                    it.update("id",it.id)
+                }
                 findNavController().navigateUp()
 
             }

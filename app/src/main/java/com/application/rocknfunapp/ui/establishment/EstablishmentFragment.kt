@@ -90,7 +90,6 @@ class EstablishmentFragment : Fragment(),CreateConcertList {
 
     private fun configureUi() {
 
-
                     name.text = establishment!!.name
                     address.text = establishment!!.location
                     contact.text = establishment!!.contact

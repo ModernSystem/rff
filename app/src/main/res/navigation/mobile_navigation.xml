@@ -65,4 +65,11 @@
         android:name="com.application.rocknfunapp.ui.establishment.EstablishmentSettingsFragment"
         android:label="fragment_establishment_settings"
         tools:layout="@layout/fragment_establishment_settings" />
+
+
+    <fragment
+        android:id="@+id/nav_wishListFragment"
+        android:name="com.application.rocknfunapp.ui.wishlist.WishListFragment"
+        android:label="fragment_wish_list"
+        tools:layout="@layout/fragment_wish_list" />
 </navigation>

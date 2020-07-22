@@ -82,4 +82,7 @@
     <string name="establishment_name_research">Research your establishment</string>
     <string name="verification_mail">A verification mail has been sent</string>
     <string name="auth_error">An error occur, please retry</string>
+    <string name="you_must_connect">You must have an account to add concert to your wishlist</string>
+    <string name="add_to_wishlist">Add to my wishlist</string>
+    <string name="menu_wishlist">Wishlist</string>
 </resources>

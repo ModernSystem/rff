@@ -126,7 +126,7 @@ class EstablishmentAuthFragment : Fragment() {
                             addPictureToFirebase(),
                             auth.currentUser!!.uid
                         )
-                        dataBase.collection("user").add(establishment)
+                        dataBase.collection("EstablishmentUser").add(establishment)
                         auth.signOut()
                         Toast.makeText(requireContext(),R.string.verification_mail,Toast.LENGTH_LONG).show()
                         findNavController().navigate(R.id.nav_home)

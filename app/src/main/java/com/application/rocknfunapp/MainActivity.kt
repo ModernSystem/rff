@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.AttributeSet
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -38,6 +39,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.app_bar_main.*
+import java.lang.ClassCastException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -47,7 +49,7 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navView: NavigationView
     private var hashSet= hashSetOf<String>()
-    private val apiKey="AIzaSyDdLLDK1T1j8PiFpPlGH5Eqs3VnK3ZmHqc"
+    private val apiKey=""
     companion object{
 
 
@@ -70,7 +72,7 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
 
 
         var researchConcertList= mutableListOf<Concert>()
-        var goingToConcert= mutableListOf<Concert>()
+        var goingToConcert= mutableListOf<String>()
         var userDocId=""
         val storage=Firebase.storage
         val dataBase=Firebase.firestore
@@ -80,14 +82,13 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
         var userEstablishment=false
         fun getEstablishment() {
             if (user != null) {
-                dataBase.collection("user")
+                dataBase.collection("EstablishmentUser")
                     .whereEqualTo("id", Firebase.auth.currentUser!!.uid)
                     .get()
                     .addOnSuccessListener { result ->
                         for (document in result) {
                             MainActivity.establishment = document.toObject<Establishment>()
                             userDocId = document.id
-
                         }
                     }
 
@@ -95,7 +96,27 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
                 null
             }
         }
+        fun getWishlist(){
+            if (user != null){
+                dataBase.collection("userWishlist")
+                    .whereEqualTo("id", Firebase.auth.currentUser!!.uid)
+                    .get()
+                    .addOnSuccessListener {result->
+                        for (document in result){
+                            if (!result.isEmpty) {
+                                try {
+                                    goingToConcert = (document.get("concertId")) as MutableList<String>
+                                }
+                                catch ( e:ClassCastException){
+                                    goingToConcert.add(document.get("concertId") as String)
+                                }
 
+                                Log.d("wishlist", goingToConcert.toString())
+                            }
+                        }
+                    }
+            }
+        }
 
         var placesClient:PlacesClient?=null
 
@@ -103,27 +124,17 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
 
     }
 
+    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
+        val view= super.onCreateView(name, context, attrs)
+        getData()
+        return view
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (user != null) {
-            dataBase.collection("user")
-                .whereEqualTo("id", Firebase.auth.currentUser!!.uid)
-                .get()
-                .addOnSuccessListener {
-                    if (!it.isEmpty) {
-                        userEstablishment = true
-                        getEstablishment()
-                        invalidateOptionsMenu()
-                        configureMenuDrawer()
-                    }
-                }
-        }
+        getData()
         setTheme(R.style.AppTheme_NoActionBar)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
-
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -147,7 +158,7 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
 
         appBarConfiguration = AppBarConfiguration(
             topLevelDestinationIds = setOf(
-                R.id.nav_home, R.id.nav_establishment
+                R.id.nav_home, R.id.nav_establishment,R.id.nav_wishListFragment,R.id.nav_loginFragment
             ), drawerLayout = drawerLayout
         )
 
@@ -251,7 +262,6 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
     override fun onBackPressed() {
         if (findNavController(R.id.nav_host_fragment).currentDestination!!.id== R.id.nav_home) {
             finish()
-
         }
         else {
             super.onBackPressed()
@@ -283,6 +293,23 @@ class MainActivity : AppCompatActivity(),CreateConcertList {
             navView.menu.findItem(R.id.nav_establishment).isVisible = false
             navView.menu.findItem(R.id.nav_loginFragment).isVisible = true
             navView.menu.findItem(R.id.nav_logoutFragment).isVisible = false
+        }
+    }
+
+    private fun getData(){
+        if (user != null) {
+            getEstablishment()
+            dataBase.collection("EstablishmentUser")
+                .whereEqualTo("id", Firebase.auth.currentUser!!.uid)
+                .get()
+                .addOnSuccessListener {
+                    if (!it.isEmpty) {
+                        userEstablishment = true
+                        invalidateOptionsMenu()
+                        configureMenuDrawer()
+                        configureFab()
+                    }
+                }
         }
     }
 

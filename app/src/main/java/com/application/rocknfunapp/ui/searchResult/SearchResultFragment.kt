@@ -41,7 +41,7 @@ class SearchResultFragment : Fragment(),BeThereButton,CreateConcertList {
         recyclerView.layoutManager=LinearLayoutManager(requireContext())
     }
 
-    override fun onButtonPlayClicked(concert: Concert) {
+    override fun onButtonPlayClicked(concert: Concert,position:Int) {
         TODO("Not yet implemented")
     }
 
